@@ -6,6 +6,21 @@ import DiaryList from './components/DiaryList'
 import EmotionStats from './components/EmotionStats'
 import DailyFeedback from './components/DailyFeedback'
 import TagManager from './components/TagManager'
+import StarCollection from './components/StarCollection'
+import { generateEmotionStar } from './utils/emotionStarGenerator'
+
+export interface EmotionStar {
+  id: string
+  emotion: string
+  intensity: number // 1-5 (감정 강도)
+  shape: 'star' | 'heart' | 'diamond' | 'circle' | 'triangle'
+  size: 'small' | 'medium' | 'large'
+  color: string
+  glow: boolean
+  pattern: 'solid' | 'gradient' | 'sparkle' | 'pulse'
+  createdAt: string
+  diaryId: string
+}
 
 export interface Diary {
   id: string
@@ -15,13 +30,14 @@ export interface Diary {
   emotionColor: string
   tags: string[]
   autoTags: string[]
+  emotionStar?: EmotionStar
 }
 
 export default function Home() {
   const [diaries, setDiaries] = useState<Diary[]>([])
   const [filteredDiaries, setFilteredDiaries] = useState<Diary[]>([])
   const [showForm, setShowForm] = useState(false)
-  const [activeTab, setActiveTab] = useState<'diary' | 'stats'>('diary')
+  const [activeTab, setActiveTab] = useState<'diary' | 'stats' | 'stars'>('diary')
 
   useEffect(() => {
     const saved = localStorage.getItem('emotion-diaries')
@@ -38,9 +54,15 @@ export default function Home() {
   }, [diaries])
 
   const saveDiary = (diary: Omit<Diary, 'id'>) => {
+    const diaryId = Date.now().toString()
+    
+    // EmotionStar 생성
+    const emotionStar = generateEmotionStar(diary.emotion, diary.content, diaryId)
+    
     const newDiary = {
       ...diary,
-      id: Date.now().toString()
+      id: diaryId,
+      emotionStar
     }
     const updated = [newDiary, ...diaries]
     setDiaries(updated)
@@ -90,6 +112,19 @@ export default function Home() {
           >
             📊 감정 통계
           </button>
+          <button
+            onClick={() => {
+              setActiveTab('stars')
+              setShowForm(false)
+            }}
+            className={`flex-1 py-2 px-4 rounded-md font-medium transition-colors ${
+              activeTab === 'stars'
+                ? 'bg-white text-indigo-600 shadow-sm'
+                : 'text-gray-600 hover:text-gray-800'
+            }`}
+          >
+            ⭐ 감정 별
+          </button>
         </div>
 
         {activeTab === 'diary' && (
@@ -126,6 +161,10 @@ export default function Home() {
 
       {activeTab === 'stats' && (
         <EmotionStats diaries={diaries} />
+      )}
+
+      {activeTab === 'stars' && (
+        <StarCollection diaries={diaries} />
       )}
     </div>
   )

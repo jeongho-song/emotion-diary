@@ -1,6 +1,7 @@
 'use client'
 
 import { Diary } from '../page'
+import EmotionStarDisplay from './EmotionStarDisplay'
 
 interface DiaryListProps {
   diaries: Diary[]
@@ -43,6 +44,16 @@ export default function DiaryList({ diaries, onDelete }: DiaryListProps) {
                 <h3 className="font-semibold text-lg text-gray-800">{diary.emotion}</h3>
                 <p className="text-sm text-gray-500">{diary.date}</p>
               </div>
+              {/* EmotionStar 표시 */}
+              {diary.emotionStar && (
+                <div className="ml-2">
+                  <EmotionStarDisplay 
+                    star={diary.emotionStar} 
+                    size="sm" 
+                    showDetails={false}
+                  />
+                </div>
+              )}
             </div>
             <button
               onClick={() => onDelete(diary.id)}

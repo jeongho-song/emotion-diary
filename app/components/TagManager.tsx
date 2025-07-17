@@ -15,7 +15,7 @@ export default function TagManager({ diaries, onFilterChange }: TagManagerProps)
   const [showAllTags, setShowAllTags] = useState(false)
 
   const popularTags = getPopularTags(diaries, showAllTags ? 50 : 10)
-  
+
   // 검색어로 태그 필터링
   const filteredTags = popularTags.filter(({ tag }) =>
     tag.toLowerCase().includes(searchQuery.toLowerCase())
@@ -25,9 +25,9 @@ export default function TagManager({ diaries, onFilterChange }: TagManagerProps)
     const newSelectedTags = selectedTags.includes(tag)
       ? selectedTags.filter(t => t !== tag)
       : [...selectedTags, tag]
-    
+
     setSelectedTags(newSelectedTags)
-    
+
     // 필터링된 일기 목록 업데이트
     const filteredDiaries = searchByTags(diaries, newSelectedTags)
     onFilterChange(filteredDiaries)
@@ -58,7 +58,7 @@ export default function TagManager({ diaries, onFilterChange }: TagManagerProps)
       '여행': 'bg-teal-100 text-teal-800 border-teal-200',
       '취미': 'bg-violet-100 text-violet-800 border-violet-200',
     }
-    
+
     return colorMap[tag] || 'bg-gray-100 text-gray-800 border-gray-200'
   }
 
@@ -130,24 +130,23 @@ export default function TagManager({ diaries, onFilterChange }: TagManagerProps)
             {showAllTags ? '간단히 보기' : '더 보기'}
           </button>
         </div>
-        
+
         <div className="flex flex-wrap gap-2">
           {filteredTags.map(({ tag, count }) => (
             <button
               key={tag}
               onClick={() => handleTagToggle(tag)}
-              className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium border transition-all hover:scale-105 ${
-                selectedTags.includes(tag)
-                  ? `${getTagColor(tag)} ring-2 ring-indigo-300`
-                  : `${getTagColor(tag)} hover:shadow-md`
-              }`}
+              className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium border transition-all hover:scale-105 ${selectedTags.includes(tag)
+                ? `${getTagColor(tag)} ring-2 ring-indigo-300`
+                : `${getTagColor(tag)} hover:shadow-md`
+                }`}
             >
               #{tag}
               <span className="ml-1 text-xs opacity-75">({count})</span>
             </button>
           ))}
         </div>
-        
+
         {filteredTags.length === 0 && searchQuery && (
           <div className="text-center py-4 text-gray-500">
             "{searchQuery}"와 관련된 태그를 찾을 수 없습니다.
