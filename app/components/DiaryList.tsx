@@ -30,7 +30,7 @@ export default function DiaryList({ diaries, onDelete }: DiaryListProps) {
   return (
     <div className="space-y-4">
       <h2 className="text-2xl font-semibold text-gray-800 mb-6">나의 감정 일기</h2>
-      
+
       {diaries.map((diary) => (
         <div
           key={diary.id}
@@ -54,7 +54,7 @@ export default function DiaryList({ diaries, onDelete }: DiaryListProps) {
               </svg>
             </button>
           </div>
-          
+
           <div className="prose prose-gray max-w-none">
             <p className="text-gray-700 leading-relaxed whitespace-pre-wrap">{diary.content}</p>
           </div>
