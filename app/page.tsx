@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import DiaryEntry from './components/DiaryEntry'
 import DiaryList from './components/DiaryList'
 import EmotionStats from './components/EmotionStats'
+import DailyFeedback from './components/DailyFeedback'
 
 export interface Diary {
   id: string
@@ -93,6 +94,9 @@ export default function Home() {
       {/* 컨텐츠 영역 */}
       {activeTab === 'diary' && (
         <>
+          {/* 일일 피드백 */}
+          <DailyFeedback diaries={diaries} />
+          
           {showForm && (
             <div className="mb-8">
               <DiaryEntry onSave={saveDiary} />
