@@ -169,9 +169,9 @@ export default function DailyFeedback({ diaries }: DailyFeedbackProps) {
       acc[diary.emotion] = (acc[diary.emotion] || 0) + 1
       return acc
     }, {} as Record<string, number>)
-    
+
     const dominantEmotion = Object.entries(emotionCounts)
-      .sort(([,a], [,b]) => b - a)[0]?.[0] || latestEmotion
+      .sort(([, a], [, b]) => b - a)[0]?.[0] || latestEmotion
 
     // 해당 감정에 맞는 피드백 선택
     const emotionFeedbackList = emotionFeedbacks[dominantEmotion] || generalFeedbacks
@@ -191,7 +191,7 @@ export default function DailyFeedback({ diaries }: DailyFeedbackProps) {
     }, {} as Record<string, number>)
 
     const emotions = Object.entries(emotionCounts)
-      .sort(([,a], [,b]) => b - a)
+      .sort(([, a], [, b]) => b - a)
       .map(([emotion, count]) => `${emotion}(${count}회)`)
 
     return emotions.join(', ')
@@ -238,7 +238,7 @@ export default function DailyFeedback({ diaries }: DailyFeedbackProps) {
             <p className="text-lg leading-relaxed">{currentFeedback.reflection}</p>
             <p className="text-lg font-medium">{currentFeedback.encouragement}</p>
           </div>
-          
+
           <div className="mt-4 pt-4 border-t border-white border-opacity-30">
             <div className="flex justify-between items-center">
               <div className={`text-sm ${currentFeedback.textColor} opacity-75`}>

@@ -5,6 +5,7 @@ import DiaryEntry from './components/DiaryEntry'
 import DiaryList from './components/DiaryList'
 import EmotionStats from './components/EmotionStats'
 import DailyFeedback from './components/DailyFeedback'
+import TagManager from './components/TagManager'
 
 export interface Diary {
   id: string
@@ -12,19 +13,29 @@ export interface Diary {
   emotion: string
   content: string
   emotionColor: string
+  tags: string[]
+  autoTags: string[]
 }
 
 export default function Home() {
   const [diaries, setDiaries] = useState<Diary[]>([])
+  const [filteredDiaries, setFilteredDiaries] = useState<Diary[]>([])
   const [showForm, setShowForm] = useState(false)
   const [activeTab, setActiveTab] = useState<'diary' | 'stats'>('diary')
 
   useEffect(() => {
     const saved = localStorage.getItem('emotion-diaries')
     if (saved) {
-      setDiaries(JSON.parse(saved))
+      const loadedDiaries = JSON.parse(saved)
+      setDiaries(loadedDiaries)
+      setFilteredDiaries(loadedDiaries)
     }
   }, [])
+
+  // 일기 목록이 변경될 때 필터링된 목록도 업데이트
+  useEffect(() => {
+    setFilteredDiaries(diaries)
+  }, [diaries])
 
   const saveDiary = (diary: Omit<Diary, 'id'>) => {
     const newDiary = {
@@ -102,7 +113,14 @@ export default function Home() {
               <DiaryEntry onSave={saveDiary} />
             </div>
           )}
-          <DiaryList diaries={diaries} onDelete={deleteDiary} />
+          
+          {/* 태그 관리자 */}
+          <TagManager 
+            diaries={diaries} 
+            onFilterChange={setFilteredDiaries}
+          />
+          
+          <DiaryList diaries={filteredDiaries} onDelete={deleteDiary} />
         </>
       )}
 

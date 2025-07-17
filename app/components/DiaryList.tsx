@@ -58,6 +58,35 @@ export default function DiaryList({ diaries, onDelete }: DiaryListProps) {
           <div className="prose prose-gray max-w-none">
             <p className="text-gray-700 leading-relaxed whitespace-pre-wrap">{diary.content}</p>
           </div>
+
+          {/* 태그 표시 */}
+          {((diary.tags && diary.tags.length > 0) || (diary.autoTags && diary.autoTags.length > 0)) && (
+            <div className="mt-4 pt-3 border-t border-gray-100">
+              <div className="flex flex-wrap gap-2">
+                {/* 해시태그 (사용자가 직접 입력) */}
+                {diary.tags?.map(tag => (
+                  <span
+                    key={`hash-${tag}`}
+                    className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-indigo-100 text-indigo-800 border border-indigo-200"
+                  >
+                    <span className="mr-1">🏷️</span>
+                    #{tag}
+                  </span>
+                ))}
+                
+                {/* 자동 태그 (AI가 추출) */}
+                {diary.autoTags?.map(tag => (
+                  <span
+                    key={`auto-${tag}`}
+                    className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800 border border-green-200"
+                  >
+                    <span className="mr-1">🤖</span>
+                    {tag}
+                  </span>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
       ))}
     </div>
